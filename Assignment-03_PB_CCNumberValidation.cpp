@@ -1,9 +1,11 @@
 #include<iostream>
 #include<string>
 #include<vector>
+#include<iomanip>
 using namespace std;
 
 bool isvalidcc(const string&);
+int getDoubledVal(int& value);
 
 int main()
 {
@@ -33,6 +35,30 @@ int main()
 	return 0;
 }
 
-bool isValidCC(const string &cardNum) {
+bool isValidCC(const string& cardNum) { // Checks to ensure value is between 13 and 16
+	int singleDigitValues = 0;
+	int oddPlaceValues = 0;
+	
+	if(cardNum.length() < 13 || cardNum.length() > 16) {
+		return false;
+	}
+	if(cardNum[0] != '4' || cardNum[0] != '5' || cardNum[0] != '6' || cardNum.substr(0,2) != "37") { // Checks to ensure value is one of the major cards
+		return false;
+	}
+
+	for(int i = cardNum.length() - 1; i >= 0 ; i--) {
+		int temp = cardNum[i] - '0';
+		singleDigitValues += getDoubledVal(temp);
+	}
+	cout << singleDigitValues << endl;
+
 	return true;
+}
+
+int getDoubledVal(int& value) {	//Returns the doubled value
+	int doubled = value * 2;
+	if(value > 9) {
+		doubled = value % 10 + value / 10;
+	}
+	return doubled;
 }
