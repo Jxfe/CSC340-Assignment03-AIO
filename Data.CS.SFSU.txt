@@ -1,0 +1,19 @@
+arrow|noun -=>> Here is one arrow: <IMG> -=>> </IMG>..   
+book|noun -=>> A set of pages.|verb -=>> To arrange something on a particular date.|verb -=>> to arrange for someone to have a seat on a plane.|noun -=>> A written work published in printed or electronic form. 
+bookable|adjective -=>> Can be ordered in advanced. 
+bookbinder|noun -=>> A person who fastens the pages of books.   
+bookcase|noun -=>> A piece of furniture with shelves. 
+csc210|adjective -=>> ready for CSC 220.|adjective -=>> Comfortable with Objects and Classes.|noun -=>> Intro to Java.|verb -=>> To learn Java.      
+csc220|noun -=>> data Structures.|verb -=>> To create data structures.|adjective -=>> Ready to create complex data structures.   
+csc340|adjective -=>> = C++ version of CSC210 + CSC220 + more.|noun -=>> a CS upper division course.|noun -=>> many hours outside of class.|noun -=>> Programming Methodology.   
+placeholder|noun -=>> To be updated...|adjective -=>> To be updated...|adjective -=>> To be updated...|adverb -=>> To be updated...|conjunction -=>> To be updated...|interjection -=>> To be updated...|noun -=>> To be updated...|noun -=>> To be updated...|preposition -=>> To be updated...|pronoun -=>> To be updated...|verb -=>> To be updated...   
+distinct|noun -=>> Distinct is a parameter in this assignment.|noun -=>> a keyword in this assignment.|adjective -=>> unique. No duplicates. Clearly different or of a different kind.|adjective -=>> Familiar. Worked in Java.|noun -=>> An advanced search option.|noun -=>> A keyword in this assignment.|noun -=>> A keyword in this assignment.|adverb -=>> Uniquely. Written "distinctly".
+adverb|noun -=>> Adverb is a word that adds more information about place, time, manner, cause or degree to a verb, an adjective, a phrase or another adverb.    
+adjective|noun -=>> Adjective is a word that describes a person or thing, for example big, red and clever in a big house, red wine and a clever idea. 
+conjunction|noun -=>> Conjunction is a word that joins words, phrases or sentences, for example 'and', 'but', 'or'.   
+interjection|noun -=>> Interjection is a short sound, word or phrase spoken suddenly to express an emotion. Oh!, Look out! and Ow! are interjections.  
+noun|noun -=>> Noun is a word that refers to a person, (such as Ann or doctor), a place (such as Paris or city) or a thing, a quality or an activity (such as plant, sorrow or tennis). 
+preposition|noun -=>> preposition is a word or group of words, such as in, from, to, out of and on behalf of, used before a noun or pronoun to show place, position, time or method. 
+pronoun|noun -=>> pronoun is a word that is used instead of a noun or noun phrase, for example he, it, hers, me, them, etc... 
+verb|noun -=>> verb is a word or group of words that expresses an action (such as eat), an event (such as happen) or a state (such as exist). 
+reverse|verb -=>> Change something to opposite.|verb -=>> go back.|verb -=>> turn something inside out.|verb -=>> revoke ruling.|adjective -=>> Opposite to usual or previous arrangement.|adjective -=>> On back side.|noun -=>> The opposite.|noun -=>> Change to opposite direction.|noun -=>> A dictionary program's parameter.|noun -=>> To be updated...|verb -=>> To be updated...|noun -=>> To be updated...|noun -=>> To be updated...|verb -=>> To be updated...|noun -=>> To be updated...
