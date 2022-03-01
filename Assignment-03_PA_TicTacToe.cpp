@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 using namespace std;
 
 bool isWon(char, char[][3]);
@@ -44,3 +45,27 @@ int main() {
 
 	return 0;
 } 
+
+bool isWon(char, char[][3]) {
+	return true;
+}
+
+bool isDraw(char[][3]) {
+	return true;
+}
+
+void displayBoard(char board[][3]) {
+	cout << endl;
+	for(int row = 0; row < 3; row++) {
+		cout << "-------------" << endl;
+		for(int col = 0; col < 3; col++) {
+			cout << "| " << board[row][col] << " ";
+		}
+		cout << "|" << endl;
+	}
+	cout << "-------------" << endl;
+}
+
+void makeAMove(char[][3], char) {
+	
+}
