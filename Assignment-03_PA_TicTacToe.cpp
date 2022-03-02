@@ -7,6 +7,9 @@ bool isDraw(char[][3]);
 void displayBoard(char[][3]);
 void makeAMove(char[][3], char);
 
+int const maxMoves = 9;
+int totalMoves = 0;
+
 int main() {
 	//
 	//	PLEASE DO NOT CHANGE function main
@@ -46,12 +49,39 @@ int main() {
 	return 0;
 } 
 
-bool isWon(char, char[][3]) {
-	return true;
+bool isWon(char token, char board[][3]) { //Checks every row, col, and diagnal for winning patterns
+	if(board[0][0] == token && board[0][1] == token && board[0][2]) {
+		return true;
+	}
+	if(board[1][0] == token && board[1][1] == token && board[1][2]) {
+		return true;
+	}
+	if(board[2][0] == token && board[2][1] == token && board[2][2]) {
+		return true;
+	}
+	if(board[0][0] == token && board[1][0] == token && board[2][0]) {
+		return true;
+	}
+	if(board[0][1] == token && board[1][1] == token && board[2][1]) {
+		return true;
+	}
+	if(board[0][2] == token && board[1][2] == token && board[2][2]) {
+		return true;
+	}
+	if(board[0][0] == token && board[1][1] == token && board[2][2]) {
+		return true;
+	}
+	if(board[2][0] == token && board[1][1] == token && board[0][2]) {
+		return true;
+	}
+	return false;
 }
 
-bool isDraw(char[][3]) {
-	return true;
+bool isDraw(char board[][3]) {
+	if(totalMoves == maxMoves) {
+		return true;
+	}
+	return false;
 }
 
 void displayBoard(char board[][3]) {
@@ -66,6 +96,24 @@ void displayBoard(char board[][3]) {
 	cout << "-------------" << endl;
 }
 
-void makeAMove(char[][3], char) {
-	
+void makeAMove(char board[][3], char token) {
+	totalMoves++;
+	int row = 0;
+	int col = 0;
+	bool tokenPlaced = false;
+
+	while(tokenPlaced == false) {
+		cout << "Enter a row (0, 1, 2) for player " << token << " : ";
+		cin >> row;
+		cout << "Enter a column (0, 1, 2) for player " << token << " : ";
+		cin >> col;
+
+		if(board[row][col] == ' ') {
+			board[row][col] == token;
+			tokenPlaced = true;
+		}
+		else {
+			cout << "This cell is already occupied. Try a different cell" << endl;
+		}
+	}
 }
