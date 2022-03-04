@@ -49,29 +49,29 @@ int main() {
 	return 0;
 } 
 
-bool isWon(char token, char board[][3]) { //Checks every row, col, and diagnal for winning patterns
-	if(board[0][0] == token && board[0][1] == token && board[0][2]) {
+bool isWon(char token, char board[][3]) { 
+	if(board[0][0] == token && board[0][1] == token && board[0][2] == token) {
 		return true;
 	}
-	if(board[1][0] == token && board[1][1] == token && board[1][2]) {
+	else if(board[1][0] == token && board[1][1] == token && board[1][2] == token) {
 		return true;
 	}
-	if(board[2][0] == token && board[2][1] == token && board[2][2]) {
+	else if(board[2][0] == token && board[2][1] == token && board[2][2] == token) {
 		return true;
 	}
-	if(board[0][0] == token && board[1][0] == token && board[2][0]) {
+	else if(board[0][0] == token && board[1][0] == token && board[2][0] == token) {
 		return true;
 	}
-	if(board[0][1] == token && board[1][1] == token && board[2][1]) {
+	else if(board[0][1] == token && board[1][1] == token && board[2][1] == token) {
 		return true;
 	}
-	if(board[0][2] == token && board[1][2] == token && board[2][2]) {
+	else if(board[0][2] == token && board[1][2] == token && board[2][2] == token) {
 		return true;
 	}
-	if(board[0][0] == token && board[1][1] == token && board[2][2]) {
+	else if(board[0][0] == token && board[1][1] == token && board[2][2] == token) {
 		return true;
 	}
-	if(board[2][0] == token && board[1][1] == token && board[0][2]) {
+	else if(board[2][0] == token && board[1][1] == token && board[0][2] == token) {
 		return true;
 	}
 	return false;
@@ -97,23 +97,28 @@ void displayBoard(char board[][3]) {
 }
 
 void makeAMove(char board[][3], char token) {
-	totalMoves++;
-	int row = 0;
-	int col = 0;
-	bool tokenPlaced = false;
+    totalMoves++;
+    int row;
+    int col;
+    bool tokenPlaced = false;
 
-	while(tokenPlaced == false) {
-		cout << "Enter a row (0, 1, 2) for player " << token << " : ";
-		cin >> row;
-		cout << "Enter a column (0, 1, 2) for player " << token << " : ";
-		cin >> col;
+    while(tokenPlaced == false) {
+        cout << "Enter a row (0, 1, 2) for player " << token << " : ";
+        cin >> row;
+        cout << "Enter a column (0, 1, 2) for player " << token << " : ";
+        cin >> col;
 
-		if(board[row][col] == ' ') {
-			board[row][col] == token;
-			tokenPlaced = true;
+		if(row < 0 || row > 2 || col < 0 || col > 2) {
+			cout << "Out of Range try again" << endl; //Realistically the examples dont really ask for this?
 		}
 		else {
-			cout << "This cell is already occupied. Try a different cell" << endl;
-		}
+			if(board[row][col] == ' ') {
+            	board[row][col] = token;
+            	break;
+			}
+			else {
+				cout << "This cell is already occupied. Try a different cell" << endl;
+			}
+        }
 	}
 }
