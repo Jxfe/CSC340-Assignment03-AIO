@@ -7,6 +7,7 @@
 #include<list>
 #include<algorithm>
 #include<sstream>
+#include<algorithm>
 
 using namespace std;
 
@@ -55,12 +56,17 @@ class Dictionary {
         }
 };
 
+vector<Dictionary> returnPartsOfSpeech(string, vector<Dictionary>);
+vector<Dictionary> returnDistinct(vector<Dictionary>);
+vector<Dictionary> returnReverse (vector<Dictionary>);
+
 int main() {
     string fileLocation = "./Data.CS.SFSU.txt";
     bool fileOpen = false;
     ifstream fin(fileLocation);
     vector<Dictionary> dict;
     vector<string> words;
+    vector<string> pos = {"noun", "verb", "adjective", "adverb", "pronoun", "preposition", "conjunction", "interjection"};
     int counter = 0;
     bool isRunning = true;
 
@@ -149,6 +155,7 @@ int main() {
         }
 
 
+        vector<Dictionary> temp = dict;
         if(inputs.size() == 1) {
             if (find(words.begin(), words.end(), inputs[0]) != words.end()) {
                 for(Dictionary i : dict) {
@@ -161,10 +168,42 @@ int main() {
                 cout << "   <Not found.>" << endl;
             }
         }
+        else if(inputs.size() == 2) {
+            for(string s : pos) {
+                if(inputs[1] == s) {
+                    temp = returnPartsOfSpeech(s, temp);
+                }
+            }
+            if (inputs[1] == "distinct") {
+                temp = returnDistinct(temp);
+            }
+            if (inputs[1] == "reverse") {
+                temp = returnReverse(temp);
+        }
+        else if(inputs.size() == 3) {
+            if (inputs[2] == "distinct") {
+                temp = returnDistinct(temp);
+            }
+            if (inputs[2] == "reverse") {
+                temp = returnReverse(temp);
+            }
+        }
+        else if(inputs.size() == 4) {
+            if (inputs[3] == "reverse") {
+                temp = returnReverse(temp);
+            }
+        }
+        else { //If more then 4 params
+            cout << "   PARAMETER HOW-TO, please enter:" << "\n"
+                << "   1. A search key -then 2. An optional part of speech -then" << "\n" 
+                << "   3. An optional 'distinct' -then 4. An optional 'reverse'" << endl;
+        }
+
 
         cout << "   |" << endl;
     }
     return 0;
+}
 }
 
 bool hasDigits(string& str) { //Checks if number is inside string
@@ -183,4 +222,19 @@ vector<string> processInput(string& str) { //Splits inputs using spaces
     //    cout << s << endl;
     //}
     return input;
+}
+
+vector<Dictionary> returnPartsOfSpeech(string partsOfSpeech, vector<Dictionary> v) {
+    vector<Dictionary> pos;
+    return pos;
+}
+
+vector<Dictionary> returnDistinct(vector<Dictionary> v) {
+    vector<Dictionary> distinct;
+    return distinct;
+}
+
+vector<Dictionary> returnReverse(vector<Dictionary> v) {
+    vector<Dictionary> reverse;
+    return reverse;
 }
