@@ -169,16 +169,21 @@ int main() {
             }
         }
         else if(inputs.size() == 2) {
-            for(string s : pos) {
-                if(inputs[1] == s) {
-                    temp = returnPartsOfSpeech(s, temp);
-                }
-            }
+            
             if (inputs[1] == "distinct") {
                 temp = returnDistinct(temp);
             }
             if (inputs[1] == "reverse") {
                 temp = returnReverse(temp);
+            }
+            if (inputs[1] == "distinct") {//Recode this to parts of speech
+            }
+
+            for(Dictionary i : dict) {
+                    if(i.getWord() == inputs[0]) {
+                        cout << "   " <<  i.toString() << "\n";
+                    }
+                }
         }
         else if(inputs.size() == 3) {
             if (inputs[2] == "distinct") {
@@ -187,11 +192,23 @@ int main() {
             if (inputs[2] == "reverse") {
                 temp = returnReverse(temp);
             }
+
+            for(Dictionary i : dict) {
+                    if(i.getWord() == inputs[0]) {
+                        cout << "   " <<  i.toString() << "\n";
+                    }
+                }
         }
         else if(inputs.size() == 4) {
             if (inputs[3] == "reverse") {
                 temp = returnReverse(temp);
             }
+
+            for(Dictionary i : dict) {
+                    if(i.getWord() == inputs[0]) {
+                        cout << "   " <<  i.toString() << "\n";
+                    }
+                }
         }
         else { //If more then 4 params
             cout << "   PARAMETER HOW-TO, please enter:" << "\n"
@@ -203,7 +220,6 @@ int main() {
         cout << "   |" << endl;
     }
     return 0;
-}
 }
 
 bool hasDigits(string& str) { //Checks if number is inside string
