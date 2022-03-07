@@ -6,10 +6,12 @@
 #include<map>
 #include<list>
 #include<algorithm>
+#include<sstream>
 
 using namespace std;
 
 bool hasDigits(string&);
+vector<string> processInput(string&);
 
 class Dictionary {
     private:
@@ -55,10 +57,10 @@ class Dictionary {
 
 int main() {
     string fileLocation = "./Data.CS.SFSU.txt";
-    map<string, vector<string>> hmap;
     bool fileOpen = false;
     ifstream fin(fileLocation);
     vector<Dictionary> dict;
+    vector<string> words;
     int counter = 0;
     bool isRunning = true;
 
@@ -73,6 +75,7 @@ int main() {
                 int findDivide = line.find_first_of("|");
                 int findArrow = line.find_first_of("-=>>");
                 string word = line.substr(0, findDivide); //Gets Word
+                words.push_back(word);
                 string pos;
                 string def;
                 line.erase(0, findDivide + 1);            //Erases word and divider
@@ -111,55 +114,73 @@ int main() {
     cout << "! Closing data file... " << fileLocation << endl;
     fin.close();
     cout << "====== DICTIONARY 340 C++ ===== " << endl;
-    cout << "------ Keywords: 19" << endl;
-    cout << "------ Definitions: 61" << endl << endl;
+    cout << "------ Keywords: " << words.size() << endl;
+    cout << "------ Definitions: " << dict.size() << endl << endl;
 
     //for (Dictionary i : dict)
     //{
     //    cout << i.toString() << "\n";
     //}
 
-    do {
+    while(true) {
         string userInput;
-        string word;
-        string param;
+        vector<string> inputs;
         bool shouldPrint = true;
         counter++;
         
         cout << "Search [" << counter << "] ";
-        cin >> userInput;
+        getline(cin, userInput);
 
-        for(auto& c: userInput) {
+        for(auto& c: userInput) { // swithes input to lowercase
             c = tolower(c);
         }
+        inputs = processInput(userInput); //Assigns word and param to inputs
 
-        if(userInput == "!help" || userInput == "" || userInput == " ") {
-            cout << "   |" << endl;
+        cout << "   |" << endl;
+        if(inputs[0] == "!help" || inputs[0] == "" || inputs[0] == " ") {
             cout << "   PARAMETER HOW-TO, please enter:" << "\n"
                 << "   1. A search key -then 2. An optional part of speech -then" << "\n" 
                 << "   3. An optional 'distinct' -then 4. An optional 'reverse'" << endl;
-            cout << "   |" << endl;
         }
-        else if(userInput == "!q" || userInput == "!quit") {
+        else if(inputs[0] == "!q" || inputs[0] == "!quit") {
             isRunning = false;
             cout << endl << "-----THANK YOU-----" << endl;
             break;
         }
 
-        cout << "   |" << endl;
-        for (Dictionary i : dict)
-        {
-            if(i.getWord() == userInput) {
-                cout << "   " <<  i.toString() << "\n";
+
+        if(inputs.size() == 1) {
+            if (find(words.begin(), words.end(), inputs[0]) != words.end()) {
+                for(Dictionary i : dict) {
+                    if(i.getWord() == inputs[0]) {
+                        cout << "   " <<  i.toString() << "\n";
+                    }
+                }
+            }
+            else {
+                cout << "   <Not found.>" << endl;
             }
         }
+
         cout << "   |" << endl;
-
-    }while(isRunning);
-
+    }
     return 0;
 }
 
 bool hasDigits(string& str) { //Checks if number is inside string
     return any_of(str.begin(), str.end(), ::isdigit);
-}W
+}
+
+vector<string> processInput(string& str) { //Splits inputs using spaces
+    vector<string> input;
+    string temp;
+    std::stringstream ss(str);
+    while (getline(ss, temp, ' ')){
+		input.push_back(temp);
+	}
+    
+    //for(auto&s : input) {
+    //    cout << s << endl;
+    //}
+    return input;
+}
