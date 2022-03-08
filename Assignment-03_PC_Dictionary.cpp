@@ -54,6 +54,10 @@ class Dictionary {
             test[0] = toupper(test[0]);
             return test + " [" + partOfSpeech + "] : " +definition;
         }
+        bool operator > (const Dictionary& str) const
+        {
+            return (partOfSpeech < str.partOfSpeech);
+        }
 };
 
 vector<Dictionary> returnPartsOfSpeech(string, vector<Dictionary>);
@@ -119,6 +123,7 @@ int main() {
     }
     cout << "! Closing data file... " << fileLocation << endl;
     fin.close();
+    std::sort(dict.begin(), dict.end(),greater<Dictionary>());  //Sorts the vector by part of speech so adjective, adverb... noun
     cout << "====== DICTIONARY 340 C++ ===== " << endl;
     cout << "------ Keywords: " << words.size() << endl;
     cout << "------ Definitions: " << dict.size() << endl << endl;
