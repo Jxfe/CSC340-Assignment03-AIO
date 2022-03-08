@@ -61,7 +61,7 @@ vector<Dictionary> returnDistinct(vector<Dictionary>);
 vector<Dictionary> returnReverse (vector<Dictionary>);
 
 int main() {
-    string fileLocation = "./Data.CS.SFSU.txt";
+    string fileLocation = "./data.CS.SFSU.txt";
     bool fileOpen = false;
     ifstream fin(fileLocation);
     vector<Dictionary> dict;
@@ -123,11 +123,6 @@ int main() {
     cout << "------ Keywords: " << words.size() << endl;
     cout << "------ Definitions: " << dict.size() << endl << endl;
 
-    //for (Dictionary i : dict)
-    //{
-    //    cout << i.toString() << "\n";
-    //}
-
     while(true) {
         string userInput;
         vector<string> inputs;
@@ -158,7 +153,7 @@ int main() {
         vector<Dictionary> temp = dict;
         if(inputs.size() == 1) {
             if (find(words.begin(), words.end(), inputs[0]) != words.end()) {
-                for(Dictionary i : dict) {
+                for(Dictionary i : temp) {
                     if(i.getWord() == inputs[0]) {
                         cout << "   " <<  i.toString() << "\n";
                     }
@@ -168,7 +163,7 @@ int main() {
                 cout << "   <Not found.>" << endl;
             }
         }
-        else if(inputs.size() == 2) {
+        if(inputs.size() == 2) {
             
             if (inputs[1] == "distinct") {
                 temp = returnDistinct(temp);
@@ -176,41 +171,54 @@ int main() {
             if (inputs[1] == "reverse") {
                 temp = returnReverse(temp);
             }
-            if (inputs[1] == "distinct") {//Recode this to parts of speech
+            if (find(inputs.begin(), inputs.end(), inputs[1]) != inputs.end()) {
+                temp = returnPartsOfSpeech(inputs[1], temp);
             }
 
-            for(Dictionary i : dict) {
+            for(Dictionary i : temp) {
                     if(i.getWord() == inputs[0]) {
                         cout << "   " <<  i.toString() << "\n";
                     }
                 }
         }
-        else if(inputs.size() == 3) {
+        if(inputs.size() == 3) {
             if (inputs[2] == "distinct") {
                 temp = returnDistinct(temp);
             }
             if (inputs[2] == "reverse") {
                 temp = returnReverse(temp);
             }
+            if (find(inputs.begin(), inputs.end(), inputs[1]) != inputs.end()) {
+                temp = returnPartsOfSpeech(inputs[1], temp);
+            }
 
-            for(Dictionary i : dict) {
+            for(Dictionary i : temp) {
                     if(i.getWord() == inputs[0]) {
                         cout << "   " <<  i.toString() << "\n";
                     }
                 }
         }
-        else if(inputs.size() == 4) {
+        if(inputs.size() == 4) {
+            if (inputs[2] == "distinct") {
+                temp = returnDistinct(temp);
+            }
+            if (inputs[2] == "reverse") {
+                temp = returnReverse(temp);
+            }
+            if (find(inputs.begin(), inputs.end(), inputs[1]) != inputs.end()) {
+                temp = returnPartsOfSpeech(inputs[1], temp);
+            }
             if (inputs[3] == "reverse") {
                 temp = returnReverse(temp);
             }
 
-            for(Dictionary i : dict) {
+            for(Dictionary i : temp) {
                     if(i.getWord() == inputs[0]) {
                         cout << "   " <<  i.toString() << "\n";
                     }
                 }
         }
-        else { //If more then 4 params
+        else if(inputs.size() > 4) { //If more then 4 params
             cout << "   PARAMETER HOW-TO, please enter:" << "\n"
                 << "   1. A search key -then 2. An optional part of speech -then" << "\n" 
                 << "   3. An optional 'distinct' -then 4. An optional 'reverse'" << endl;
@@ -242,6 +250,11 @@ vector<string> processInput(string& str) { //Splits inputs using spaces
 
 vector<Dictionary> returnPartsOfSpeech(string partsOfSpeech, vector<Dictionary> v) {
     vector<Dictionary> pos;
+    for(Dictionary i : v) {
+        if(i.getPartOfSpeech() == partsOfSpeech) {
+            pos.push_back(i);
+        }
+    }
     return pos;
 }
 
@@ -252,5 +265,8 @@ vector<Dictionary> returnDistinct(vector<Dictionary> v) {
 
 vector<Dictionary> returnReverse(vector<Dictionary> v) {
     vector<Dictionary> reverse;
+    for(int i = v.size() - 1 ; i >= 0; i--) {
+        reverse.push_back(v[i]);
+    }
     return reverse;
 }
