@@ -14,7 +14,7 @@ using namespace std;
 bool hasDigits(string&);
 vector<string> processInput(string&);
 
-class Dictionary {
+class Dictionary {                                                                              //Custom Object class to store Word, Parts of Speech and Defintion in 1 Vector
     private:
         string word;
         string partOfSpeech;
@@ -44,8 +44,8 @@ class Dictionary {
         void setDefinition(string s) {
             definition = s;
         }
-        string toString() {
-            string test = word;         //Sets first letter to uppercase
+        string toString() {                                                                     // to String method to print out in Dictionary
+            string test = word;                                                                 //Sets first letter to uppercase as well as all characters if theres num in string
             if(hasDigits(test) == true) {
                 for(auto& s: test) {
                     s = toupper(s);
@@ -54,54 +54,57 @@ class Dictionary {
             test[0] = toupper(test[0]);
             return test + " [" + partOfSpeech + "] : " +definition;
         }
-        bool operator > (const Dictionary& str) const
-        {
+        bool operator > (const Dictionary& str) const {                                         //Required to override the compare function
             return (partOfSpeech < str.partOfSpeech);
         }
+        bool operator==(const Dictionary& str) const {                                          //Honestly this doesnt work but used to see if two Dictionary match
+            if(str.partOfSpeech == partOfSpeech) {
+                return true;
+            }
+            return false;
+        }       
 };
 
 vector<Dictionary> returnPartsOfSpeech(string, vector<Dictionary>);
 vector<Dictionary> returnDistinct(vector<Dictionary>);
 vector<Dictionary> returnReverse (vector<Dictionary>);
+vector<string> pos = {"noun", "verb", "adjective", "adverb", "pronoun", "preposition", "conjunction", "interjection"};
 
 int main() {
-    string fileLocation = "./data.CS.SFSU.txt";
-    bool fileOpen = false;
+    string fileLocation = "./data.CS.SFSU.txt";                                                 //Stores text file location
     ifstream fin(fileLocation);
     vector<Dictionary> dict;
-    vector<string> words;
-    vector<string> pos = {"noun", "verb", "adjective", "adverb", "pronoun", "preposition", "conjunction", "interjection"};
-    int counter = 0;
-    bool isRunning = true;
+    vector<string> words;                                                                       //Stores words to later compare to input
+    int counter = 0;                                                                            //Counter for Search[x] later
 
-    while(fileOpen == false) {
+    while(true) {                                                                               //Loop to process String and check if file location is correct
         ifstream fin(fileLocation);
         string line;
-        if(fin.is_open()) {
+        if(fin.is_open()) {                                                                     
             cout << "! Opening data file... " << fileLocation << endl;
             cout << "! Loading data..." << endl;
 
-            while(getline(fin, line)) {
+            while(getline(fin, line)) {                                                         //Reads each line 1 by one and processes it into a Vector
                 int findDivide = line.find_first_of("|");
                 int findArrow = line.find_first_of("-=>>");
-                string word = line.substr(0, findDivide); //Gets Word
+                string word = line.substr(0, findDivide);                                       //Gets Word
                 words.push_back(word);
                 string pos;
                 string def;
-                line.erase(0, findDivide + 1);            //Erases word and divider
+                line.erase(0, findDivide + 1);                                                  //Erases word and divider
                 bool running = true;
-                while(running) {
+                while(running) {                                                                //Loop to break down line and get definitions and parts of speech
                     findArrow  = line.find_first_of("-=>>");
                     findDivide = line.find_first_of("|");
-                    if(findDivide == -1) {
-                        pos = line.substr(0, findArrow - 1);
-                        line.erase(0, findArrow + 5);
+                    if(findDivide == -1) {                                                      //If the divider is not found for next definition it returns -1
+                        pos = line.substr(0, findArrow - 1);                                    //Gets Parts of Speech by using subtr to next Arrow
+                        line.erase(0, findArrow + 5);                                           //Removes the Arrow and the rest should be definition
                         def = line;
                         Dictionary temp(word, pos, def);
-                        dict.push_back(temp);
-                        break;
+                        dict.push_back(temp);                                                   //Adds the newly made temp Dictionary instance to vector dict
+                        break;                                                                  //breaks because the string has no more dividers so no more definitions
                     }
-                    else {
+                    else {                                                                      //Same as above but divider is still there so it continues the while loop
                         pos = line.substr(0, findArrow - 1);
                         line.erase(0, findArrow + 5);
                         findDivide = line.find_first_of("|");
@@ -112,53 +115,52 @@ int main() {
                     }
                 }
             }
-            break;
+            break;                                                                              //Breaks loop if file opened fine 
         }
         else {
             cout << "<!>ERROR<!> ===> File could not be opened." << endl;
             cout << "<!>ERROR<!> ===> Provided file path: " << fileLocation << endl;
             cout << "<!>Enter the CORRECT data file path: ";
-            cin >> fileLocation;
+            cin >> fileLocation;                                                                //Requests new file location because current one is wrong
         }
     }
     cout << "! Closing data file... " << fileLocation << endl;
     fin.close();
-    std::sort(dict.begin(), dict.end(),greater<Dictionary>());  //Sorts the vector by part of speech so adjective, adverb... noun
+    std::sort(dict.begin(), dict.end(),greater<Dictionary>());                                  //Sorts the vector by part of speech so adjective, adverb... noun
     cout << "====== DICTIONARY 340 C++ ===== " << endl;
     cout << "------ Keywords: " << words.size() << endl;
     cout << "------ Definitions: " << dict.size() << endl << endl;
 
-    while(true) {
-        string userInput;
-        vector<string> inputs;
-        bool shouldPrint = true;
-        counter++;
+    while(true) {                                                                               //Dictionary loop for the search function
+        string userInput;                                                              
+        vector<string> inputs;                                                                  //Vector used to store inputs
+        bool isPos = false;                                                                     //bool value to see if parts of string is used
+        counter++;                                                                              //Adds to above counter for Search[x]
         
         cout << "Search [" << counter << "] ";
-        getline(cin, userInput);
+        getline(cin, userInput);                                                                //Gets line from user and assigns to userInput
 
-        for(auto& c: userInput) { // swithes input to lowercase
+        for(auto& c: userInput) {                                                               //Swithes input to lowercase         
             c = tolower(c);
         }
-        inputs = processInput(userInput); //Assigns word and param to inputs
+        inputs = processInput(userInput);                                                       //Assigns word and param to vector inputs
 
         cout << "   |" << endl;
-        if(inputs[0] == "!help" || inputs[0] == "" || inputs[0] == " ") {
+        if(inputs[0] == "!help" || inputs[0] == "" || inputs[0] == " ") {                       //Outputs help if requested
             cout << "   PARAMETER HOW-TO, please enter:" << "\n"
                 << "   1. A search key -then 2. An optional part of speech -then" << "\n" 
                 << "   3. An optional 'distinct' -then 4. An optional 'reverse'" << endl;
         }
-        else if(inputs[0] == "!q" || inputs[0] == "!quit") {
-            isRunning = false;
+        else if(inputs[0] == "!q" || inputs[0] == "!quit") {                                    //Breaks out of loop if requested
             cout << endl << "-----THANK YOU-----" << endl;
             break;
         }
 
 
-        vector<Dictionary> temp = dict;
-        if(inputs.size() == 1) {
-            if (find(words.begin(), words.end(), inputs[0]) != words.end()) {
-                for(Dictionary i : temp) {
+        vector<Dictionary> temp = dict;                                                         //New vector made so I dont modify original
+        if(inputs.size() == 1) {                                                                //Does following actions if input size is 1
+            if (find(words.begin(), words.end(), inputs[0]) != words.end()) {                   //Checks if word is in the dictionary
+                for(Dictionary i : temp) {                                                      //Loops through dictionary and prints if it matches word
                     if(i.getWord() == inputs[0]) {
                         cout << "   " <<  i.toString() << "\n";
                     }
@@ -168,16 +170,51 @@ int main() {
                 cout << "   <Not found.>" << endl;
             }
         }
-        if(inputs.size() == 2) {
-            
-            if (inputs[1] == "distinct") {
+        if(inputs.size() == 2) {                                                                //Does following actions if input size is 2
+            if (inputs[1] == "distinct") {                                                      //Checks for Distinct in param 
                 temp = returnDistinct(temp);
             }
-            if (inputs[1] == "reverse") {
+            if (inputs[1] == "reverse") {                                                       //Checks for Reverse in param 
+                temp = returnReverse(temp);
+            }
+            if (find(inputs.begin(), inputs.end(), inputs[1]) != inputs.end()) {                //Checks if Parts of Speech is in inputs
+                isPos = true;
+                temp = returnPartsOfSpeech(inputs[1], temp);
+            }
+            if(inputs[1] != "distinct" && inputs[1] != "reverse" && isPos == false) {           //Outputs error messages if param does not match Distinct, Reverse or Pos
+                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT a part of speech.>" << endl;
+                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'distinct'.>" << endl;
+                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'reverse'.>" << endl;
+                cout << "<The 2nd parameter should be a part of speech or 'distinct' or 'reverse'.>" << endl;
+            }
+
+            for(Dictionary i : temp) {
+                if(i.getWord() == inputs[0]) {
+                    cout << "   " <<  i.toString() << "\n";
+                }
+            }
+        }
+        if(inputs.size() == 3) {                                                                //Does following actions if input size is 3
+            if (inputs[2] == "distinct" || inputs[1] == "distinct") {
+                temp = returnDistinct(temp);
+            }
+            if (inputs[2] == "reverse" || inputs[1] == "reverse") {
                 temp = returnReverse(temp);
             }
             if (find(inputs.begin(), inputs.end(), inputs[1]) != inputs.end()) {
+                isPos = true;
                 temp = returnPartsOfSpeech(inputs[1], temp);
+            }
+            if(inputs[1] != "distinct" && inputs[1] != "reverse" && isPos == false) {
+                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT a part of speech.>" << endl;
+                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'distinct'.>" << endl;
+                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'reverse'.>" << endl;
+                cout << "<The 2nd parameter should be a part of speech or 'distinct' or 'reverse'.>" << endl;
+            }
+            if(inputs[2] != "distinct" && inputs[2] != "reverse") {
+                cout << "<The entered 3rd parameter " << "'" << inputs[2] << "' is NOT 'distinct'.>" << endl;
+                cout << "<The entered 3rd parameter " << "'" << inputs[2] << "' is NOT 'reverse'.>" << endl;
+                cout << "<The 3rd parameter should be 'distinct' or 'reverse'.> " << endl;
             }
 
             for(Dictionary i : temp) {
@@ -186,15 +223,32 @@ int main() {
                     }
                 }
         }
-        if(inputs.size() == 3) {
-            if (inputs[2] == "distinct") {
+        if(inputs.size() == 4) {                                                                //Does following actions if input size is 4
+            if (inputs[2] == "distinct" || inputs[1] == "distinct") {
                 temp = returnDistinct(temp);
             }
-            if (inputs[2] == "reverse") {
+            if (inputs[1] == "reverse" || inputs[2] == "reverse" || inputs[3] == "reverse") {
                 temp = returnReverse(temp);
             }
             if (find(inputs.begin(), inputs.end(), inputs[1]) != inputs.end()) {
+                isPos = true;
                 temp = returnPartsOfSpeech(inputs[1], temp);
+            }
+            if(inputs[1] != "distinct" && inputs[1] != "reverse" && isPos == false) {
+                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT a part of speech.>" << endl;
+                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'distinct'.>" << endl;
+                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'reverse'.>" << endl;
+                cout << "<The 2nd parameter should be a part of speech or 'distinct' or 'reverse'.>" << endl;
+            }
+            if(inputs[2] != "distinct" && inputs[2] != "reverse") {
+                cout << "<The entered 3rd parameter " << "'" << inputs[2] << "' is NOT 'distinct'.>" << endl;
+                cout << "<The entered 3rd parameter " << "'" << inputs[2] << "' is NOT 'reverse'.>" << endl;
+                cout << "<The 3rd parameter should be 'distinct' or 'reverse'.> " << endl;
+            }
+            if(inputs[4] != "reverse") {
+                cout << "<The entered 4th parameter " << "'" << inputs[2] << "' is NOT 'reverse'.>" << endl;
+                cout << "<The 4th parameter should be 'reverse'.> " << endl;
+                
             }
 
             for(Dictionary i : temp) {
@@ -203,43 +257,21 @@ int main() {
                     }
                 }
         }
-        if(inputs.size() == 4) {
-            if (inputs[2] == "distinct") {
-                temp = returnDistinct(temp);
-            }
-            if (inputs[2] == "reverse") {
-                temp = returnReverse(temp);
-            }
-            if (find(inputs.begin(), inputs.end(), inputs[1]) != inputs.end()) {
-                temp = returnPartsOfSpeech(inputs[1], temp);
-            }
-            if (inputs[3] == "reverse") {
-                temp = returnReverse(temp);
-            }
-
-            for(Dictionary i : temp) {
-                    if(i.getWord() == inputs[0]) {
-                        cout << "   " <<  i.toString() << "\n";
-                    }
-                }
-        }
-        else if(inputs.size() > 4) { //If more then 4 params
+        else if(inputs.size() > 4) {                                                            //If more then 4 params print help
             cout << "   PARAMETER HOW-TO, please enter:" << "\n"
                 << "   1. A search key -then 2. An optional part of speech -then" << "\n" 
                 << "   3. An optional 'distinct' -then 4. An optional 'reverse'" << endl;
         }
-
-
         cout << "   |" << endl;
     }
     return 0;
 }
 
-bool hasDigits(string& str) { //Checks if number is inside string
+bool hasDigits(string& str) {                                                                   //Checks if number is inside string
     return any_of(str.begin(), str.end(), ::isdigit);
 }
 
-vector<string> processInput(string& str) { //Splits inputs using spaces
+vector<string> processInput(string& str) {                                                      //Splits inputs using spaces
     vector<string> input;
     string temp;
     std::stringstream ss(str);
@@ -253,25 +285,26 @@ vector<string> processInput(string& str) { //Splits inputs using spaces
     return input;
 }
 
-vector<Dictionary> returnPartsOfSpeech(string partsOfSpeech, vector<Dictionary> v) {
+vector<Dictionary> returnPartsOfSpeech(string partsOfSpeech, vector<Dictionary> v) {            //Returns Vector with just parts of speech
     vector<Dictionary> pos;
-    for(Dictionary i : v) {
-        if(i.getPartOfSpeech() == partsOfSpeech) {
+    for(Dictionary i : v) {                                                                     //Loops through entire param
+        if(i.getPartOfSpeech() == partsOfSpeech) {                                              //If the Dictionary part of speech matches param it adds it to vector pos
             pos.push_back(i);
         }
     }
     return pos;
 }
 
-vector<Dictionary> returnDistinct(vector<Dictionary> v) {
-    vector<Dictionary> distinct;
+vector<Dictionary> returnDistinct(vector<Dictionary> v) {                                       //Returns Vector with no duplicates
+    vector<Dictionary> distinct = v;
+    distinct.erase(unique(distinct.begin(), distinct.end()), distinct.end());
     return distinct;
 }
 
-vector<Dictionary> returnReverse(vector<Dictionary> v) {
+vector<Dictionary> returnReverse(vector<Dictionary> v) {                                        //Returns Vector with reversed param
     vector<Dictionary> reverse;
-    for(int i = v.size() - 1 ; i >= 0; i--) {
-        reverse.push_back(v[i]);
+    for(int i = v.size() - 1 ; i >= 0; i--) {                                                   //Loops through Vector backwards
+        reverse.push_back(v[i]);                                                                //Adds it to vector reverse as it loops backwards
     }
     return reverse;
 }
