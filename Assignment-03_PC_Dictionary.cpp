@@ -7,7 +7,6 @@
 #include<list>
 #include<algorithm>
 #include<sstream>
-#include<algorithm>
 
 using namespace std;
 
@@ -57,11 +56,11 @@ class Dictionary {                                                              
         bool operator > (const Dictionary& str) const {                                         //Required to override the compare function
             return (partOfSpeech < str.partOfSpeech);
         }
-        bool operator==(const Dictionary& str) const {                                          //Honestly this doesnt work but used to see if two Dictionary match
-            if(str.partOfSpeech == partOfSpeech) {
-                return true;
+        bool operator == (const Dictionary& str) const {                                        //Used to make comparisons
+            if (partOfSpeech != str.partOfSpeech || definition != str.definition) {
+                return false;
             }
-            return false;
+            return true;
         }       
 };
 
@@ -126,7 +125,7 @@ int main() {
     }
     cout << "! Closing data file... " << fileLocation << endl;
     fin.close();
-    std::sort(dict.begin(), dict.end(),greater<Dictionary>());                                  //Sorts the vector by part of speech so adjective, adverb... noun
+    //std::sort(dict.begin(), dict.end(),greater<Dictionary>());                                  //Sorts the vector by part of speech so adjective, adverb... noun
     cout << "====== DICTIONARY 340 C++ ===== " << endl;
     cout << "------ Keywords: " << words.size() << endl;
     cout << "------ Definitions: " << dict.size() << endl << endl;
@@ -136,7 +135,7 @@ int main() {
         vector<string> inputs;                                                                  //Vector used to store inputs
         bool isPos = false;                                                                     //bool value to see if parts of string is used
         counter++;                                                                              //Adds to above counter for Search[x]
-        
+        bool printHelp = false;
         cout << "Search [" << counter << "] ";
         getline(cin, userInput);                                                                //Gets line from user and assigns to userInput
 
@@ -145,15 +144,17 @@ int main() {
         }
         inputs = processInput(userInput);                                                       //Assigns word and param to vector inputs
 
+
+        if(inputs[0] == "!q" || inputs[0] == "!quit") {                                        //Breaks out of loop if requested
+            cout << endl << "-----THANK YOU-----" << endl;
+            break;
+        }
         cout << "   |" << endl;
         if(inputs[0] == "!help" || inputs[0] == "" || inputs[0] == " ") {                       //Outputs help if requested
             cout << "   PARAMETER HOW-TO, please enter:" << "\n"
                 << "   1. A search key -then 2. An optional part of speech -then" << "\n" 
                 << "   3. An optional 'distinct' -then 4. An optional 'reverse'" << endl;
-        }
-        else if(inputs[0] == "!q" || inputs[0] == "!quit") {                                    //Breaks out of loop if requested
-            cout << endl << "-----THANK YOU-----" << endl;
-            break;
+            printHelp = true;
         }
 
 
@@ -167,27 +168,36 @@ int main() {
                 }
             }
             else {
-                cout << "   <Not found.>" << endl;
+                if(printHelp == false) {
+                    cout << "   <NOT FOUND> To be considered for the next release. Thank you." << endl;
+                    cout << "   |" << endl;
+                    cout << "   |" << endl;
+                    cout << "   PARAMETER HOW-TO, please enter:" << "\n"
+                    << "   1. A search key -then 2. An optional part of speech -then" << "\n" 
+                    << "   3. An optional 'distinct' -then 4. An optional 'reverse'" << endl;
+                }
             }
         }
-        if(inputs.size() == 2) {                                                                //Does following actions if input size is 2
+        if(inputs.size() == 2) {                                                                //Does following actions if input size is 2            
+            for(string s : pos) {
+                if(inputs[1] == s) {
+                    isPos = true;
+                    temp = returnPartsOfSpeech(inputs[1], temp);
+                }
+            }
             if (inputs[1] == "distinct") {                                                      //Checks for Distinct in param 
                 temp = returnDistinct(temp);
             }
+            std::sort(dict.begin(), dict.end(),greater<Dictionary>());
             if (inputs[1] == "reverse") {                                                       //Checks for Reverse in param 
                 temp = returnReverse(temp);
             }
-            if (find(inputs.begin(), inputs.end(), inputs[1]) != inputs.end()) {                //Checks if Parts of Speech is in inputs
-                isPos = true;
-                temp = returnPartsOfSpeech(inputs[1], temp);
-            }
             if(inputs[1] != "distinct" && inputs[1] != "reverse" && isPos == false) {           //Outputs error messages if param does not match Distinct, Reverse or Pos
-                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT a part of speech.>" << endl;
-                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'distinct'.>" << endl;
-                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'reverse'.>" << endl;
-                cout << "<The 2nd parameter should be a part of speech or 'distinct' or 'reverse'.>" << endl;
+                cout << "   <The entered 2nd parameter " << "'" << inputs[1] << "' is NOT a part of speech.>" << endl;
+                cout << "   <The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'distinct'.>" << endl;
+                cout << "   <The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'reverse'.>" << endl;
+                cout << "   <The 2nd parameter should be a part of speech or 'distinct' or 'reverse'.>" << endl;
             }
-
             for(Dictionary i : temp) {
                 if(i.getWord() == inputs[0]) {
                     cout << "   " <<  i.toString() << "\n";
@@ -195,26 +205,30 @@ int main() {
             }
         }
         if(inputs.size() == 3) {                                                                //Does following actions if input size is 3
+            for(string s : pos) {
+                if(inputs[1] == s) {
+                    isPos = true;
+                    temp = returnPartsOfSpeech(inputs[1], temp);
+                }
+            }
             if (inputs[2] == "distinct" || inputs[1] == "distinct") {
                 temp = returnDistinct(temp);
             }
+            std::sort(dict.begin(), dict.end(),greater<Dictionary>());
             if (inputs[2] == "reverse" || inputs[1] == "reverse") {
                 temp = returnReverse(temp);
             }
-            if (find(inputs.begin(), inputs.end(), inputs[1]) != inputs.end()) {
-                isPos = true;
-                temp = returnPartsOfSpeech(inputs[1], temp);
-            }
+            
             if(inputs[1] != "distinct" && inputs[1] != "reverse" && isPos == false) {
-                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT a part of speech.>" << endl;
-                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'distinct'.>" << endl;
-                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'reverse'.>" << endl;
-                cout << "<The 2nd parameter should be a part of speech or 'distinct' or 'reverse'.>" << endl;
+                cout << "   <The entered 2nd parameter " << "'" << inputs[1] << "' is NOT a part of speech.>" << endl;
+                cout << "   <The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'distinct'.>" << endl;
+                cout << "   <The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'reverse'.>" << endl;
+                cout << "   <The 2nd parameter should be a part of speech or 'distinct' or 'reverse'.>" << endl;
             }
             if(inputs[2] != "distinct" && inputs[2] != "reverse") {
-                cout << "<The entered 3rd parameter " << "'" << inputs[2] << "' is NOT 'distinct'.>" << endl;
-                cout << "<The entered 3rd parameter " << "'" << inputs[2] << "' is NOT 'reverse'.>" << endl;
-                cout << "<The 3rd parameter should be 'distinct' or 'reverse'.> " << endl;
+                cout << "   <The entered 3rd parameter " << "'" << inputs[2] << "' is NOT 'distinct'.>" << endl;
+                cout << "   <The entered 3rd parameter " << "'" << inputs[2] << "' is NOT 'reverse'.>" << endl;
+                cout << "   <The 3rd parameter should be 'distinct' or 'reverse'.> " << endl;
             }
 
             for(Dictionary i : temp) {
@@ -224,38 +238,42 @@ int main() {
                 }
         }
         if(inputs.size() == 4) {                                                                //Does following actions if input size is 4
+            for(string s : pos) {
+                if(inputs[1] == s) {
+                    isPos = true;
+                    temp = returnPartsOfSpeech(inputs[1], temp);
+                }
+            }
             if (inputs[2] == "distinct" || inputs[1] == "distinct") {
                 temp = returnDistinct(temp);
             }
+            std::sort(dict.begin(), dict.end(),greater<Dictionary>());
             if (inputs[1] == "reverse" || inputs[2] == "reverse" || inputs[3] == "reverse") {
                 temp = returnReverse(temp);
             }
-            if (find(inputs.begin(), inputs.end(), inputs[1]) != inputs.end()) {
-                isPos = true;
-                temp = returnPartsOfSpeech(inputs[1], temp);
-            }
+        
             if(inputs[1] != "distinct" && inputs[1] != "reverse" && isPos == false) {
-                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT a part of speech.>" << endl;
-                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'distinct'.>" << endl;
-                cout << "<The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'reverse'.>" << endl;
-                cout << "<The 2nd parameter should be a part of speech or 'distinct' or 'reverse'.>" << endl;
+                cout << "   <The entered 2nd parameter " << "'" << inputs[1] << "' is NOT a part of speech.>" << endl;
+                cout << "   <The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'distinct'.>" << endl;
+                cout << "   <The entered 2nd parameter " << "'" << inputs[1] << "' is NOT 'reverse'.>" << endl;
+                cout << "   <The 2nd parameter should be a part of speech or 'distinct' or 'reverse'.>" << endl;
             }
             if(inputs[2] != "distinct" && inputs[2] != "reverse") {
-                cout << "<The entered 3rd parameter " << "'" << inputs[2] << "' is NOT 'distinct'.>" << endl;
-                cout << "<The entered 3rd parameter " << "'" << inputs[2] << "' is NOT 'reverse'.>" << endl;
-                cout << "<The 3rd parameter should be 'distinct' or 'reverse'.> " << endl;
+                cout << "   <The entered 3rd parameter " << "'" << inputs[2] << "' is NOT 'distinct'.>" << endl;
+                cout << "   <The entered 3rd parameter " << "'" << inputs[2] << "' is NOT 'reverse'.>" << endl;
+                cout << "   <The 3rd parameter should be 'distinct' or 'reverse'.> " << endl;
             }
-            if(inputs[4] != "reverse") {
-                cout << "<The entered 4th parameter " << "'" << inputs[2] << "' is NOT 'reverse'.>" << endl;
-                cout << "<The 4th parameter should be 'reverse'.> " << endl;
+            //cout << "Fuk" << endl;
+            if(inputs[3] != "reverse") {
+                cout << "   <The entered 4th parameter " << "'" << inputs[2] << "' is NOT 'reverse'.>" << endl;
+                cout << "   <The 4th parameter should be 'reverse'.> " << endl;
                 
             }
-
             for(Dictionary i : temp) {
                     if(i.getWord() == inputs[0]) {
                         cout << "   " <<  i.toString() << "\n";
                     }
-                }
+             }
         }
         else if(inputs.size() > 4) {                                                            //If more then 4 params print help
             cout << "   PARAMETER HOW-TO, please enter:" << "\n"
@@ -278,10 +296,6 @@ vector<string> processInput(string& str) {                                      
     while (getline(ss, temp, ' ')){
 		input.push_back(temp);
 	}
-    
-    //for(auto&s : input) {
-    //    cout << s << endl;
-    //}
     return input;
 }
 
@@ -295,10 +309,13 @@ vector<Dictionary> returnPartsOfSpeech(string partsOfSpeech, vector<Dictionary> 
     return pos;
 }
 
-vector<Dictionary> returnDistinct(vector<Dictionary> v) {                                       //Returns Vector with no duplicates
-    vector<Dictionary> distinct = v;
-    distinct.erase(unique(distinct.begin(), distinct.end()), distinct.end());
-    return distinct;
+vector<Dictionary> returnDistinct(vector<Dictionary> v) {            
+    vector<Dictionary> temp = v;            
+    bool duplicateFound = false;
+    if (temp.size() > 1) {
+        temp.erase(unique(temp.begin(), temp.end()), temp.end()); // remove duplicates
+    }
+    return temp;
 }
 
 vector<Dictionary> returnReverse(vector<Dictionary> v) {                                        //Returns Vector with reversed param
