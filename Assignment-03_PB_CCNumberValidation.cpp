@@ -1,3 +1,12 @@
+/****************************************************************
+*
+* File: Assignment-03_PB_CCNumberValidation.cpp
+* By: Jeffrey Ma
+* Date: 03/14/2022
+*
+* Description: Verifies Credit Card #
+*
+****************************************************************/
 #include<iostream>
 #include<string>
 #include<vector>

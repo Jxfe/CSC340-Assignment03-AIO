@@ -1,3 +1,13 @@
+/****************************************************************
+*
+* File: Assignment-03_PC_Dictionary.cpp
+* By: Jeffrey Ma
+* Date: 03/14/2022
+*
+* Description: Dictionary in C++ imports words from txt file
+* Displays results dependent on given paramters from user.(Parts of Speech, Reverse, Distinct)
+*
+****************************************************************/
 #include<iostream>
 #include<string>
 #include<fstream>
