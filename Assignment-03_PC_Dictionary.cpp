@@ -67,7 +67,15 @@ class Dictionary {                                                              
             return (partOfSpeech < str.partOfSpeech);
         }
         bool operator == (const Dictionary& str) const {                                        //Used to make comparisons
-            if (partOfSpeech != str.partOfSpeech || definition != str.definition) {
+            string temp1 = str.definition;
+            string temp2 = definition;
+            for(auto& c: temp1) {                                                               //Swithes input to lowercase         
+                temp1 = tolower(c);
+            }
+            for(auto& c: temp2) {                                                               //Swithes input to lowercase         
+                temp2 = tolower(c);
+            }
+            if (partOfSpeech != str.partOfSpeech || temp1 != temp2) {
                 return false;
             }
             return true;
@@ -97,6 +105,7 @@ int main() {
                 int findDivide = line.find_first_of("|");
                 int findArrow = line.find_first_of("-=>>");
                 string word = line.substr(0, findDivide);                                       //Gets Word
+                string temp = word;
                 words.push_back(word);
                 string pos;
                 string def;
@@ -109,6 +118,7 @@ int main() {
                         pos = line.substr(0, findArrow - 1);                                    //Gets Parts of Speech by using subtr to next Arrow
                         line.erase(0, findArrow + 5);                                           //Removes the Arrow and the rest should be definition
                         def = line;
+                        def[0] = toupper(def[0]);
                         Dictionary temp(word, pos, def);
                         dict.push_back(temp);                                                   //Adds the newly made temp Dictionary instance to vector dict
                         break;                                                                  //breaks because the string has no more dividers so no more definitions
@@ -118,6 +128,7 @@ int main() {
                         line.erase(0, findArrow + 5);
                         findDivide = line.find_first_of("|");
                         def = line.substr(0, findDivide);
+                        def[0] = toupper(def[0]);
                         line.erase(0, findDivide + 1);
                         Dictionary temp(word, pos, def);
                         dict.push_back(temp);
